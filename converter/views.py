@@ -76,15 +76,15 @@ def delete_uploaded_pdfs(request):
 
     # Lấy tham số 'he_dao_tao' và 'danh_sach_quyet_dinh' từ body param
     he_dao_tao = request.POST.get('he_dao_tao')
-    danh_sach_quyet_dinh = request.POST.get('danh_sach_quyet_dinh')
+    # danh_sach_quyet_dinh = request.POST.get('danh_sach_quyet_dinh')
 
-    if not he_dao_tao or not danh_sach_quyet_dinh:
+    if not he_dao_tao:
         return JsonResponse({'error': 'Thiếu tham số he_dao_tao hoặc danh_sach_quyet_dinh'}, status=400)
 
     # Lọc dữ liệu theo các tham số 'he_dao_tao' và 'danh_sach_quyet_dinh'
     files_to_delete = UploadedPDF.objects.filter(
         he_dao_tao=he_dao_tao,
-        danh_sach_quyet_dinh=danh_sach_quyet_dinh
+        # danh_sach_quyet_dinh=danh_sach_quyet_dinh
     )
 
     # Nếu không có dữ liệu nào để xóa
