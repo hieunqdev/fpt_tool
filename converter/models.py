@@ -4,6 +4,7 @@ class UploadedPDF(models.Model):
     pdf_file = models.FileField(upload_to='uploaded_pdfs/')
     he_dao_tao = models.CharField(max_length=100)
     danh_sach_quyet_dinh = models.CharField(max_length=100)
+    ten_file = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
         return f"{self.pdf_file.name} ({self.he_dao_tao})"

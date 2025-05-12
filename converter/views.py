@@ -1,13 +1,13 @@
-from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .utils import convert_pdf_to_excel
-from .models import UploadedPDF
-import os
 from rest_framework import generics
 from .models import UploadedPDF
 from .serializer import UploadedPDFSerializer
+from rest_framework.renderers import JSONRenderer
+
 
 class UploadedPDFListView(generics.ListAPIView):
+    renderer_classes = [JSONRenderer]
     queryset = UploadedPDF.objects.all()
     serializer_class = UploadedPDFSerializer
 
@@ -35,17 +35,18 @@ def hello_api(request):
     result = []
 
     for uploaded_file in files:
-        # Lưu vào model
-        saved_record = UploadedPDF.objects.create(
-            pdf_file=uploaded_file,
-            he_dao_tao=he_dao_tao,
-            danh_sach_quyet_dinh=danh_sach_quyet_dinh
-        )
-
         wb, preview_data, extra_info = convert_pdf_to_excel(uploaded_file)
         filename = uploaded_file.name.replace('.pdf', '.xlsx')
         output_path = os.path.join(output_dir, filename)
         wb.save(output_path)
+
+        # Lưu vào model
+        saved_record = UploadedPDF.objects.create(
+            pdf_file=uploaded_file,
+            he_dao_tao=he_dao_tao,
+            danh_sach_quyet_dinh=danh_sach_quyet_dinh,
+            ten_file=filename
+        )
 
         result.append({
             'filename': filename,
